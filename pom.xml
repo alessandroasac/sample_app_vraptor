@@ -5,6 +5,7 @@
 	<artifactId>sample_app_vraptor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sample_app_vraptor</name>
+	<packaging>war</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,30 +49,61 @@
 						<contextPath>/</contextPath>
 					</webAppConfig>
 				</configuration>
-			</plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
+				<executions>
+                <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>assemble</goal>
+                                <goal>run</goal>
                         </goals>
                         <configuration>
-                            <assembleDirectory>target</assembleDirectory>
-                            <extraJvmArguments>-Xmx512m</extraJvmArguments>
-                            <programs>
-                                <program>
-                                    <mainClass>Main</mainClass>
-                                    <name>webapp</name>
-                                </program>
-                            </programs>
+                                <scanIntervalSeconds>0</scanIntervalSeconds>
+                                <daemon>true</daemon>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                </execution>
+                <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                                <goal>stop</goal>
+                        </goals>
+                </execution>
+        </executions>
+			</plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.13</version>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>integration-test</goal>
+                      <goal>verify</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+      <plugin>
+				    <groupId>org.apache.maven.plugins</groupId>
+				    <artifactId>maven-dependency-plugin</artifactId>
+				    <version>2.3</version>
+				    <executions>
+				        <execution>
+				            <phase>package</phase>
+				            <goals><goal>copy</goal></goals>
+				            <configuration>
+				                <artifactItems>
+				                    <artifactItem>
+				                        <groupId>org.mortbay.jetty</groupId>
+				                        <artifactId>jetty-runner</artifactId>
+				                        <version>7.4.5.v20110725</version>
+				                        <destFileName>jetty-runner.jar</destFileName>
+				                    </artifactItem>
+				                </artifactItems>
+				            </configuration>
+				        </execution>
+				    </executions>
+				</plugin>
 		</plugins>
 	</build>
 
@@ -125,16 +157,19 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>7.4.4.v20110707</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jsp-2.1-glassfish</artifactId>
 			<version>2.1.v20100127</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -154,6 +189,12 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.25.0</version>
 			<scope>test</scope>
 		</dependency>
 
