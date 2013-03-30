@@ -28,6 +28,10 @@ public abstract class BaseTestController {
 		browser.quit();
 	}
 
+	protected String fullTitle(String title) {
+		return "VRaptor Sample App | " + (title != null ? title : "");
+	}
+
 	protected void shouldHaveSelector(String selector, String text) {
 		assertTrue(String.format("There is no selector '%s' with text '%s'",
 				selector, text), hasSelector(selector, text));

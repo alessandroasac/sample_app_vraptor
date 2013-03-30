@@ -1,3 +1,7 @@
 @CHARSET "UTF-8"; 
 
+@IMPORT url("bootstrap.min.css");
+
+@IMPORT url("bootstrap-responsive.min.css");
+
 @IMPORT url("scaffold.css");
