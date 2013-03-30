@@ -63,6 +63,10 @@ public abstract class BaseTestController {
 		browser.get("http://localhost:8080" + path);
 	}
 
+	protected void visitRootPath() {
+		visit("");
+	}
+
 	protected void clickLink(String linkText) {
 		WebElement element = browser.findElement(By.linkText(linkText));
 		element.click();
